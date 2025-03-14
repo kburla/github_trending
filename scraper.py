@@ -39,8 +39,8 @@ def scrape_data(url):
         language = language_t.text.strip() if language_t else None
         
         # Get stars and forks
-        stars = r.find("a", href=f"/{project}/stargazers").text.strip()
-        forks = r.find("a", href=f"/{project}/forks").text.strip()
+        stars = int(r.find("a", href=f"/{project}/stargazers").text.strip().replace(",",""))
+        forks = int(r.find("a", href=f"/{project}/forks").text.strip().replace(",",""))
         url = f"https://github.com/{project}"
         
         list.append({
@@ -53,11 +53,6 @@ def scrape_data(url):
             'forks': forks,
             'url': url
         })
-
-    # create a dataframe and clean up columns
-    df = pd.DataFrame(list)
-    df["stars"] = (df["stars"].str.replace(",","")).astype(int)
-    df["forks"] = (df["forks"].str.replace(",","")).astype(int)
     
     return list
 
