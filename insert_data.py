@@ -19,7 +19,7 @@ def insert_data(repos_data, trending_type):
             raise ValueError("Invalid trending type. Must be 'daily', 'weekly', or 'monthly'.")
 
     for repo in repos_data:
-        existing_repo = session.query(RepoModel).filter_by(name=repo["name"], date=today).first()
+        existing_repo = session.query(RepoModel).filter_by(url=repo["url"], date=today).first()
         if existing_repo is None:
             new_repo = RepoModel(
                 name = repo["name"],
