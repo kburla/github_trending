@@ -41,7 +41,7 @@ def insert_data(repos_data, trending_type):
             
     session.commit()
     session.close()
-    print(f"✅ {rows_inserted} new rows inserted and {rows_updated} rows updated successfully into {trending_type} trending repos!")
+    print(f"{rows_inserted} new rows inserted and {rows_updated} rows updated successfully into {trending_type} trending repos!")
 
 # Example usage
 if __name__ == "__main__":

@@ -9,7 +9,7 @@ from sqlalchemy.orm import declarative_base, sessionmaker
 from insert_data import insert_data
 from database import create_tables, drop_tables
 
-def scrape_data(url):
+def scrape_github_data(url):
     
     # Fetch the HTML content
     response = requests.get(url)
@@ -59,11 +59,11 @@ def scrape_data(url):
 if __name__ == "__main__":
     create_tables()
     
-    daily_data = scrape_data("https://github.com/trending?since=daily")
+    daily_data = scrape_github_data("https://github.com/trending?since=daily")
     insert_data(daily_data, 'daily')
     
-    weekly_data = scrape_data("https://github.com/trending?since=weekly")
+    weekly_data = scrape_github_data("https://github.com/trending?since=weekly")
     insert_data(weekly_data, 'weekly')
     
-    monthly_data = scrape_data("https://github.com/trending?since=monthly")
+    monthly_data = scrape_github_data("https://github.com/trending?since=monthly")
     insert_data(monthly_data, 'monthly')
