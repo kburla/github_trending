@@ -1,12 +1,15 @@
 from database import Session
 from models import DailyTrendingRepo, WeeklyTrendingRepo, MonthlyTrendingRepo
-from datetime import date
+from datetime import datetime, timedelta
 
 def insert_data(repos_data, trending_type):
     session = Session()
-    today = date.today()
+    now = datetime.now()
     rows_inserted = 0
     rows_updated = 0
+    
+    # set interval
+    half_hour_ago = now - timedelta(hours=0.5)
     
     match trending_type:
         case 'daily':
@@ -19,7 +22,8 @@ def insert_data(repos_data, trending_type):
             raise ValueError("Invalid trending type. Must be 'daily', 'weekly', or 'monthly'.")
 
     for repo in repos_data:
-        existing_repo = session.query(RepoModel).filter_by(url=repo["url"], date=today).first()
+        # check for rows with datetime of up to an hour ago
+        existing_repo = session.query(RepoModel).filter(RepoModel.url == repo["url"], RepoModel.date >= half_hour_ago).first()
         if existing_repo is None:
             new_repo = RepoModel(
                 name = repo["name"],
@@ -28,17 +32,10 @@ def insert_data(repos_data, trending_type):
                 stars = repo["stars"],
                 forks = repo["forks"],
                 url = repo["url"],
-                date = today
+                date = now
             )
             session.add(new_repo)
             rows_inserted += 1
-        else:
-            if existing_repo.stars != repo['stars'] or existing_repo.forks != repo['forks']:
-                existing_repo.stars = repo["stars"]
-                existing_repo.forks = repo["forks"]
-                session.add(existing_repo)
-                rows_updated += 1
-            
     session.commit()
     session.close()
     print(f"{rows_inserted} new rows inserted and {rows_updated} rows updated successfully into {trending_type} trending repos!")

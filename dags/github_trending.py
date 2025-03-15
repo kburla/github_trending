@@ -4,8 +4,8 @@ from airflow import DAG
 from airflow.operators.python import PythonOperator
 from datetime import datetime, timedelta
 
-# Add the src directory to the Python path
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../../src/projects/github_trending_pipeline/')))
+# Add the directory containing scraper.py to the Python path
+sys.path.append('/home/kburla/src/projects/github_trending_pipeline')
 
 from scraper import scrape_github_data, create_tables
 from insert_data import insert_data
@@ -13,7 +13,7 @@ from insert_data import insert_data
 default_args = {
     'owner': 'airflow',
     'depends_on_past': False,
-    'start_date': datetime(2025, 3, 14),
+    'start_date': datetime(2025, 3, 15, 14, 0, 0),
     'retries': 1,
     'retry_delay': timedelta(minutes=5)
 }
@@ -23,7 +23,7 @@ dag = DAG(
     'github_trending_pipeline',
     default_args=default_args,
     description='A simple GitHub trending scraper pipeline',
-    schedule_interval=timedelta(hours=1),  # Modify to desired interval (e.g., every hour)
+    schedule_interval=timedelta(hours=1)
 )
 
 # Define a task to scrape the data
@@ -45,3 +45,5 @@ scrape_task = PythonOperator(
     python_callable=scrape_and_load_data,
     dag=dag,
 )
+
+scrape_task
