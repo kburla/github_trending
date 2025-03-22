@@ -24,7 +24,7 @@ def scrape_github_data(url):
     projects = soup.find_all("article", class_="Box-row")
 
     list = []
-    for r in projects:
+    for r in projects:       
         # Get the project name
         project = r.h2.a.text.strip().replace("\n", "").replace(" ", "")
         matches = re.match(r"(.*)\/(.*)", project)
@@ -32,7 +32,8 @@ def scrape_github_data(url):
         name = matches[2]
         
         # Get description
-        description = r.find("p").text.strip()
+        description = r.find("p")
+        description = description.text.strip() if description else None
         
         # Get the language
         language_t = r.find("span", itemprop="programmingLanguage")

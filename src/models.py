@@ -1,8 +1,8 @@
-from sqlalchemy import create_engine, Column, Integer, String, DateTime
+from sqlalchemy import create_engine, Column, Integer, String, Date, DateTime
 from sqlalchemy.orm import declarative_base
 from datetime import datetime
 
-engine = create_engine('sqlite:///mydatabase.db')
+engine = create_engine('sqlite:///src/mydatabase.db')
 
 Base = declarative_base()
 
@@ -17,6 +17,7 @@ class DailyTrendingRepo(Base):
     forks = Column(Integer, nullable=False)
     url = Column(String, nullable=False)
     date = Column(DateTime, nullable=False, default=datetime.now)
+    trending_date = Column(Date, nullable=False, default=datetime.now().date)
     
     def __repr__(self):
         return f"<DailyTrendingRepo(name='{self.name}', url='{self.url}', date='{self.date}')>"
@@ -32,6 +33,7 @@ class WeeklyTrendingRepo(Base):
     forks = Column(Integer, nullable=False)
     url = Column(String, nullable=False)
     date = Column(DateTime, nullable=False, default=datetime.now)
+    trending_week = Column(Integer, nullable=False, default=datetime.now().isocalendar()[1])
     
     def __repr__(self):
         return f"<WeeklyTrendingRepo(name='{self.name}', url='{self.url}', date='{self.date}')>"
@@ -47,6 +49,7 @@ class MonthlyTrendingRepo(Base):
     forks = Column(Integer, nullable=False)
     url = Column(String, nullable=False)
     date = Column(DateTime, nullable=False, default=datetime.now)
+    trending_month = Column(Integer, nullable=False, default=datetime.now().month)
     
     def __repr__(self):
         return f"<MonthlyTrendingRepo(name='{self.name}', url='{self.url}', date='{self.date}')>"

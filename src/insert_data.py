@@ -14,10 +14,13 @@ def insert_data(repos_data, trending_type):
     match trending_type:
         case 'daily':
             RepoModel = DailyTrendingRepo
+            trending_value = now.date()
         case 'weekly':
             RepoModel = WeeklyTrendingRepo
+            trending_value = now.isocalendar()[1]
         case 'monthly':
             RepoModel = MonthlyTrendingRepo
+            trending_value = now.month
         case _:
             raise ValueError("Invalid trending type. Must be 'daily', 'weekly', or 'monthly'.")
 
@@ -34,6 +37,12 @@ def insert_data(repos_data, trending_type):
                 url = repo["url"],
                 date = now
             )
+            if trending_type == 'daily':
+                new_repo.trending_date = trending_value
+            elif trending_type == 'weekly':
+                new_repo.trending_week = trending_value
+            elif trending_type == 'monthly':
+                new_repo.trending_month = trending_value
             session.add(new_repo)
             rows_inserted += 1
     session.commit()

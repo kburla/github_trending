@@ -5,7 +5,7 @@ from airflow.operators.python import PythonOperator
 from datetime import datetime, timedelta
 
 # Add the directory containing scraper.py to the Python path
-sys.path.append('/home/kburla/src/projects/github_trending_pipeline')
+sys.path.append('/home/kburla/src/projects/github_trending_pipeline/src')
 
 from scraper import scrape_github_data, create_tables
 from insert_data import insert_data
