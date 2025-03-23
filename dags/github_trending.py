@@ -4,7 +4,7 @@ from airflow import DAG
 from airflow.operators.python import PythonOperator
 from datetime import datetime, timedelta
 
-# Add the directory containing scraper.py to the Python path
+# Fix this, make it an environment variable instead
 sys.path.append('/home/kburla/src/projects/github_trending_pipeline/src')
 
 from scraper import scrape_github_data, create_tables
