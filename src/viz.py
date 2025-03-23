@@ -19,7 +19,7 @@ selected_date = st.date_input("Select a date to filter trending projects", datet
 col1, col2, col3 = st.columns(3)
 
 # Function to fetch and display data for a given table
-def display_trending_data(table, days_lookback, col, selected_date):
+def display_trending_data(table, table_pretty_name, days_lookback, col, selected_date):
     cursor.execute(f"PRAGMA table_info({table})")
     columns = cursor.fetchall()
     columns = [col[1] for col in columns]
@@ -44,7 +44,7 @@ def display_trending_data(table, days_lookback, col, selected_date):
     df_pretty.columns = [col.replace('_', ' ').title() for col in df.columns]
     
     # Display Data
-    col.subheader(f"{table.replace('_', ' ').replace('trending repos', '').title()}")
+    col.subheader(table_pretty_name)
     col.dataframe(df_pretty, hide_index=True)
 
     # Repo Selection
@@ -109,8 +109,8 @@ def display_trending_data(table, days_lookback, col, selected_date):
 
         col.altair_chart(forks_layered_chart, use_container_width=True)
 
-display_trending_data('daily_trending_repos', 14, col1, selected_date) 
-display_trending_data('weekly_trending_repos', 14, col2, selected_date)
-display_trending_data('monthly_trending_repos', 14, col3, selected_date)
+display_trending_data('daily_trending_repos', 'Today', 14, col1, selected_date) 
+display_trending_data('weekly_trending_repos', 'This Week', 14, col2, selected_date)
+display_trending_data('monthly_trending_repos', 'This Month', 14, col3, selected_date)
 
 conn.close()
